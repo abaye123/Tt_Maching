@@ -1,99 +1,129 @@
 <!DOCTYPE html>
-<html lang="he">
+
+<html lang="he-IL">
+
 <head>
-    <meta charset="utf-8" />
-    <title>מצ'ינג ת"ת ישיבת עוצם</title>
-    <link rel="shortcut icon" href="https://images.matara.pro/ClientsImages/6000949.jpg">
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163311335-1"></script>
-      <script type="text/javascript" src="js/GoogleAnalytics.js"></script>
 
-    <script type="text/javascript">
-image = new Array();
-image[0] = "https://yossi263.github.io/Tt_Maching/gruop2.html";
+  <meta charset="utf-8">
 
+  <style>
 
-setInterval("document.getElementById('img_rnd').src=image[Math.round(Math.random()*(image.length-1))]",10000);
-</script> 
-    
+  .info-window{width:130px;height:120px;direction:rtl;text-align:right;}
+
+  #mapDiv{width:500px;height:500px;}
+
+  </style>
+
 </head>
-
-<style>
-body {
-    background-color: #9a03ff;
-    background-image: url("https://www.transparenttextures.com/patterns/brushed-alum-dark.png");
-    @import url('<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Varela+Round&display=swap" rel="stylesheet">');
-    font-family: Varela Round, sans-serif;
-    direction: rtl;
-    align: center;
-}
-
-.text1 {
-  @import url('<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Varela+Round&display=swap" rel="stylesheet">');
-  font-family: 'Varela Round', sans-serif;
-  text-align: center;
-}
-
-    /* Create two equal columns that floats next to each other */
-.column {
-  float: left;
-  padding: 10px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-</style>
 
 <body>
 
-<div align="center">
-<p class=text1 style="color:white; font-size:8pt;text-align:right;" >ב"ה</p>
-</div>
+  <!--הדיב שמחזיק את המפה-->
 
-<div align="center">
-<a href="/"><img src="https://images.matara.pro/ClientsImages/6000949.jpg" width="80" height="60" alt="logo"></a>
-</div>
+<div id="mapDiv"></div>
 
-<p class=text1 style="color:white; font-size:40pt;text-align:center;" >גרף נתוני התרומות</p>
-</br>
-    
-<div class="row"  >
-    <p style="color:white; font-family: 'Varela Round', sans-serif;font-size:16pt;text-align:center;"><a href=https://mitmachim.top/user/אביי</a>נבנה ע"י @אביי</span></p>
-  <div class="column2" >
-<iframe width="1250" height="840" seamless frameborder="0" scrolling="no" src="https://yossi263.github.io/Tt_Maching/gruop1.html" id="img_rnd"></iframe>
-  </div>
-  <div class="column">
-      <p style="color:white; font-family: 'Varela Round', sans-serif;font-size:16pt;text-align:center;"><a href=https://mitmachim.top/user/אביי</a>נבנה ע"י @אביי</span></p>
-<div align="center" >
-</div>
-  </div>
-  </div>
+<script>
 
-// [START maps_marker_simple]
-function initMap() {
-  const myLatLng = { lat: -25.363, lng: 131.044 };
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
-    center: myLatLng,
-  });
 
-  new google.maps.Marker({
-    position: myLatLng,
-    map,
-    title: "Hello World!",
-  });
-}
-// [END maps_marker_simple]
-</br></br>
+// מיקום המפה
 
-<div class=text1>
-<p style="color:white; font-family: 'Varela Round', sans-serif;font-size:16pt;text-align:center;"><a href=https://mitmachim.top/user/אביי</a>נבנה ע"י @אביי</span></p>
 
-</div>
-</div>
-</div>
+var mapCenter = new google.maps.LatLng(32.8,35);
+
+ 
+
+
+// תכונות המפה
+
+
+var mapProp = {
+
+   zoom: 12,
+
+  minZoom: 10,
+
+  maxZoom: 15,
+
+  center: mapCenter,
+
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+  disableDefaultUI: true,
+
+  zoomControl : true
+
+};
+
+ 
+
+var mapDiv = document.getElementById("mapDiv");
+
+ 
+
+
+// אובייקט המפה
+
+
+var map = new google.maps.Map(mapDiv,mapProp);
+
+ 
+
+
+// אובייקט מרקר על גבי המידע
+
+
+var marker = new google.maps.Marker({
+
+  position: mapCenter,
+
+  map: map
+
+});
+
+ 
+  
+var infoContent = "<div class='info-window'><h2>חיפה</h2><p>קו רוחב: "+marker.position.lat()+"</p><p>קו אורך: "+marker.position().lng()+"</p></div>";
+
+ 
+ 
+
+// חלון המידע
+
+
+var infowindow = new google.maps.InfoWindow({
+
+  content: infoContent
+
+});
+
+ 
+ 
+
+// מאזין ללחיצה על המרקר גורם להצגת חלונית המידע ולמיקוד המפה
+
+
+google.maps.event.addListener(marker, 'click', function() {
+
+  infowindow.open(map,marker);
+
+  map.setZoom(mapProp.maxZoom);
+
+});
+
+ 
+
+
+// מאזין לארוע של לחיצה לסגירת המפה גורם למפה לחזור לזום המקורי
+
+
+google.maps.event.addListener(infowindow,'closeclick',function(){
+
+  map.setZoom(mapProp.zoom);
+
+});
+
+</script>
+
+</body>
+
+</html>
